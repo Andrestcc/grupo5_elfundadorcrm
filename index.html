@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM en "El Fundador"</title>
+    <!-- Carga de Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Chart.js para gráficos dinámicos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Configuración de la fuente Inter de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Aplicar la fuente Inter a todo el cuerpo */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb; /* Fondo muy claro */
+        }
+        /* Estilo para los IDs de sección para que el navbar sticky no tape el título */
+        .section-anchor {
+            padding-top: 5rem; /* Espacio para el navbar fijo */
+            margin-top: -5rem; /* Contrarrestar el padding para mantener el flujo */
+            display: block; /* Necesario para que el anchor funcione correctamente */
+        }
+        /* Estilo personalizado para la barra de progreso */
+        #reading-progress {
+            height: 4px;
+            background-color: #b91c1c; /* Rojo McDonald's (red-700) para este tema */
+            width: 0%;
+            transition: width 0.1s;
+        }
+        /* Estilos para el scroll suave en Firefox y otros navegadores */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="text-gray-700">
+
+    <!-- 1. BARRA DE PROGRESO DE LECTURA (Fixed) -->
+    <div class="fixed top-0 left-0 right-0 z-50">
+        <div id="reading-progress" class="shadow-lg shadow-red-500/50"></div>
+    </div>
+
+    <!-- 2. NAVBAR STICKY -->
+    <header class="sticky top-0 z-40 bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <a href="#" class="flex items-center space-x-3">
+                    <img 
+                        src="image/logo_unjfsc.png"
+                        alt="Logo Universidad" 
+                        class="h-12 w-12 rounded-full object-cover mr-3 border border-indigo-100 shadow-sm shrink-0"
+                    >
+                    <span class="text-2xl font-bold text-gray-800 hidden sm:block">Caso "El Fundador"</span>
+                </a>
+
+                <!-- Menú Desktop -->
+                <nav class="hidden lg:flex space-x-6">
+                    <a href="#intro" class="text-gray-600 hover:text-red-600 transition duration-150 font-medium">1. Diagnóstico</a>
+                    <a href="#operativo" class="text-gray-600 hover:text-red-600 transition duration-150 font-medium">2. Operativo</a>
+                    <a href="#clv" class="text-gray-600 hover:text-red-600 transition duration-150 font-medium">3. CLV</a>
+                    <a href="#visiones" class="text-gray-600 hover:text-red-600 transition duration-150 font-medium">4. Visiones</a>
+                    <a href="#prm" class="text-gray-600 hover:text-red-600 transition duration-150 font-medium">5. PRM</a>
+                    <a href="#brand" class="text-gray-600 hover:text-red-600 transition duration-150 font-medium">6. Marca</a>
+                    <a href="#conclusiones" class="text-gray-600 hover:text-red-600 transition duration-150 font-medium">7. Conclusiones</a>
+                </nav>
+
+                <!-- Botón Menú Hamburguesa (Mobile) -->
+                <button id="mobile-menu-button" class="lg:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500" aria-label="Toggle menu">
+                    <svg id="menu-icon-open" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                    <svg id="menu-icon-close" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menú Mobile (Colapsado) -->
+        <div id="mobile-menu" class="hidden lg:hidden px-4 pt-2 pb-3 space-y-1 bg-gray-50 border-t">
+            <a href="#intro" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-red-50 hover:text-red-700">1. Introducción y Pain Points</a>
+            <a href="#operativo" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-red-50 hover:text-red-700">2. CRM Operativo (Speedee)</a>
+            <a href="#clv" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-red-50 hover:text-red-700">3. Segmentación y CLV</a>
+            <a href="#visiones" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-red-50 hover:text-red-700">4. Choque de Visiones</a>
+            <a href="#prm" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-red-50 hover:text-red-700">5. Gestión de Socios (PRM)</a>
+            <a href="#brand" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-red-50 hover:text-red-700">6. Estandarización y Marca</a>
+            <a href="#conclusiones" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-red-50 hover:text-red-700">7. Conclusiones Generales</a>
+        </div>
+    </header>
+
+    <!-- 3. LAYOUT PRINCIPAL (2 Columnas en Desktop, 1 Columna en Mobile) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="lg:grid lg:grid-cols-12 lg:gap-10">
+
+            <!-- Columna Izquierda: Contenido Principal (Ancha) -->
+            <main class="lg:col-span-8 bg-white p-6 sm:p-8 rounded-xl shadow-xl">
+                
+                <!-- Hero Section -->
+                <section class="mb-12 border-b pb-8">
+                    <span class="text-sm font-semibold text-red-600 uppercase tracking-wider">GESTIÓN DE RELACIONES CON CLIENTES(CRM)</span>
+                    <h1 class="mt-2 text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">
+                        Análisis de Estrategia CRM y Modelos de Negocio en "El Fundador"
+                    </h1>
+                    <p class="mt-4 text-xl text-gray-500">
+                        Cómo Ray Kroc y los hermanos McDonald redefinieron la gestión de clientes, la eficiencia operativa y la escalabilidad de marca.
+                    </p>
+                    <div class="mt-6">
+                        <span class="inline-block bg-yellow-100 text-yellow-800 text-sm font-semibold px-3 py-1 rounded-full">
+                            GRUPO 05
+                        </span>
+                        <span class="inline-block bg-gray-100 text-gray-800 text-sm font-semibold px-3 py-1 rounded-full ml-3">
+                            Módulo III
+                        </span>
+                    </div>
+                </section>
+
+                <!-- 7 Secciones de Contenido -->
+
+                <!-- 1. Introducción -->
+                <section id="intro" class="mb-12 section-anchor">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4 border-l-4 border-red-500 pl-3">1. Introducción: Diagnóstico de "Pain Points" y el Alto Churn Rate</h2>
+                    <p class="mt-4 text-lg leading-relaxed">
+                        Al inicio de la cinta, vemos a Ray Kroc recorriendo drive-ins convencionales donde la experiencia es desastrosa: meseras en patines que se equivocan con los pedidos, comida fría y tiempos de espera interminables que frustran a los comensales. Kroc vive en carne propia la ineficiencia del mercado.
+                    </p>
+                    <div class="mt-6 space-y-4">
+                        <p class="text-lg leading-relaxed">
+                            <strong class="text-red-700">Diagnóstico de Churn Rate (Tasa de Cancelación):</strong> En estos negocios, la tasa de abandono era altísima. La mala experiencia del cliente (CX) provocaba que la relación fuera transaccional y única, sin lealtad. El cliente no regresaba por satisfacción, sino por falta de opciones.
+                        </p>
+                        <p class="text-lg leading-relaxed">
+                            <strong class="text-red-700">Detección de la Oportunidad:</strong> Kroc identifica que el "océano azul" no estaba en mejorar el sabor de la hamburguesa, sino en eliminar los "puntos de dolor" (Pain Points) del proceso: la espera y el error. Su visión de CRM comienza resolviendo la fricción operativa.
+                        </p>
+                    </div>
+
+                    <!-- TABLA SECCION 1 -->
+                    <div class="mt-8 overflow-hidden rounded-lg border border-gray-200 shadow-md">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Aspecto</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Drive-In Tradicional</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-red-600 uppercase tracking-wider">Oportunidad Detectada</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                                <tr>
+                                    <td class="px-6 py-4 font-medium text-gray-900">Tiempos de Espera</td>
+                                    <td class="px-6 py-4 text-gray-600">Largos e inciertos (30+ min)</td>
+                                    <td class="px-6 py-4 text-gray-600 bg-red-50 font-semibold">Inmediato (30 seg)</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 font-medium text-gray-900">Exactitud del Pedido</td>
+                                    <td class="px-6 py-4 text-gray-600">Errores frecuentes (CX negativa)</td>
+                                    <td class="px-6 py-4 text-gray-600 bg-red-50 font-semibold">100% Precisión (Automatización)</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 font-medium text-gray-900">Tipo de Cliente</td>
+                                    <td class="px-6 py-4 text-gray-600">Pandillas, ruido, sin lealtad</td>
+                                    <td class="px-6 py-4 text-gray-600 bg-red-50 font-semibold">Familias (Alto valor)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 2. CRM Operativo -->
+                <section id="operativo" class="mb-12 section-anchor">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4 border-l-4 border-yellow-400 pl-3">2. CRM Operativo: Diseño de la Experiencia (El Sistema Speedee)</h2>
+                    <p class="mt-4 text-lg leading-relaxed">
+                        Una de las escenas más memorables es la secuencia en la cancha de tenis. Vemos a los hermanos Dick y Mac McDonald dibujando con tiza el plano de la cocina y dirigiendo a sus empleados en una "coreografía" de movimientos, moviendo estaciones una y otra vez hasta lograr la perfección absoluta en el flujo de trabajo.
+                    </p>
+                    <div class="mt-4 space-y-4">
+                        <p class="text-lg leading-relaxed">
+                            <strong class="text-yellow-700">Reingeniería de Procesos (Back-End):</strong> Este diseño meticuloso es la base del CRM Operativo. Al estandarizar el menú (eliminando los pedidos a gusto del cliente) y organizar estratégicamente el espacio de la cocina para evitar pasos innecesarios, lograron reducir el tiempo de servicio a 30 segundos, demostrando que la satisfacción externa depende de la eficiencia interna.
+                        </p>
+                        <p class="text-lg leading-relaxed">
+                            <strong class="text-yellow-700">Cumplimiento de la Promesa de Valor:</strong> La marca promete "velocidad". El sistema Speedee es la herramienta técnica que asegura que esa promesa se cumpla el 100% de las veces, generando confianza inmediata en el consumidor.
+                        </p>
+                    </div>
+
+                    <!-- GRÁFICO SECCION 2 -->
+                    <div class="mt-8 p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
+                        <h4 class="text-center font-bold text-gray-700 mb-4">Comparación de Tiempo de Servicio (Minutos)</h4>
+                        <div class="relative h-64 w-full">
+                            <canvas id="chartServiceTime"></canvas>
+                        </div>
+                        <p class="text-center text-xs text-gray-500 mt-2">*Reducción drástica del tiempo de espera como ventaja competitiva.</p>
+                    </div>
+                </section>
+                
+                <!-- 3. Segmentación y CLV -->
+                <section id="clv" class="mb-12 section-anchor">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4 border-l-4 border-red-500 pl-3">3. Segmentación y Maximización del Customer Lifetime Value (CLV)</h2>
+                    <p class="mt-4 text-lg leading-relaxed">
+                        La película muestra el contraste visual entre los viejos drive-ins —llenos de pandillas, humo y ruido— y el ambiente impecable de McDonald's. Los hermanos explican explícitamente cómo retiraron las máquinas de cigarrillos y las rockolas para que los "indeseables" dejaran de ir y, en su lugar, empezaran a llegar familias enteras.
+                    </p>
+                    <div class="mt-4 space-y-4">
+                        <p class="text-lg leading-relaxed">
+                            <strong class="text-red-700">Segmentación por Descarte:</strong> Fue una decisión estratégica de limpiar la base de clientes. Identificaron que el segmento "adolescentes rebeldes" generaba poco valor y muchos problemas, por lo que modificaron el entorno físico para repelerlos y atraer a su verdadero Buyer Persona: la familia.
+                        </p>
+                        <p class="text-lg leading-relaxed">
+                            <strong class="text-red-700">Maximización del CLV (Valor de Vida del Cliente):</strong> Financieramente, la familia es más rentable. Tienen un ticket promedio más alto (compran para varios miembros) y una recurrencia estable a lo largo de los años, lo que dispara la rentabilidad a largo plazo frente a la venta ocasional.
+                        </p>
+                    </div>
+
+                    <!-- TABLA SECCION 3 -->
+                    <div class="mt-8 overflow-hidden rounded-lg border border-gray-200 shadow-md">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-800 text-white">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Variable</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider bg-gray-700">Adolescentes Rebeldes</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider bg-red-600">Familias (Target)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                                <tr>
+                                    <td class="px-6 py-4 font-bold text-gray-900">Ticket Promedio</td>
+                                    <td class="px-6 py-4 text-gray-600">Bajo (1 soda / cigarrillos)</td>
+                                    <td class="px-6 py-4 text-green-600 font-semibold">Alto (Cenas completas)</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 font-bold text-gray-900">Comportamiento</td>
+                                    <td class="px-6 py-4 text-gray-600">Ruido, suciedad, vandalismo</td>
+                                    <td class="px-6 py-4 text-gray-600">Orden, rapidez, limpieza</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 font-bold text-gray-900">Lealtad (CLV)</td>
+                                    <td class="px-6 py-4 text-gray-600">Nula (Transaccional)</td>
+                                    <td class="px-6 py-4 text-green-600 font-semibold">Alta (Generacional)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 4. Choque de Visiones -->
+                <section id="visiones" class="mb-12 section-anchor">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4 border-l-4 border-yellow-400 pl-3">4. Choque de Visiones: Calidad de Producto vs. Escala</h2>
+                    <p class="mt-4 text-lg leading-relaxed">
+                        La tensión crece conforme Kroc quiere expandirse y los hermanos lo frenan constantemente por teléfono, rechazando cambios mínimos por miedo a que "la calidad caiga". El punto de quiebre llega cuando Harry Sonneborn revisa los libros contables y le dice a Kroc: "Tú no estás en el negocio de las hamburguesas, estás en el negocio inmobiliario".
+                    </p>
+                    <div class="mt-4 space-y-4">
+                        <p class="text-lg leading-relaxed">
+                            <strong class="text-yellow-700">Limitación del Enfoque "Producto":</strong> Los hermanos McDonald representan un CRM artesanal, no escalable. Su capacidad de gestionar la relación con el cliente estaba limitada a su presencia física; temían crecer porque perderían el control de la calidad.
+                        </p>
+                        <p class="text-lg leading-relaxed">
+                            <strong class="text-yellow-700">El Modelo Inmobiliario como Mecanismo de Control:</strong> La compra de los terrenos no fue solo una jugada financiera, sino una herramienta de gestión. Al ser dueño de la propiedad, Kroc obtuvo el poder legal para obligar a los franquiciados a cumplir los estándares de servicio, resolviendo así el dilema de mantener la calidad a escala global.
+                        </p>
+                    </div>
+
+                    <!-- DIAGRAMA VISUAL SECCION 4 -->
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Tarjeta Izquierda -->
+                        <div class="bg-gray-100 p-6 rounded-lg border-l-4 border-gray-500 shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 right-0 -mt-2 -mr-2 w-12 h-12 bg-gray-200 rounded-full"></div>
+                            <h3 class="text-xl font-bold text-gray-700 mb-2">Visión Hermanos McDonald</h3>
+                            <div class="text-sm font-semibold uppercase text-gray-500 mb-4">Modelo Artesanal</div>
+                            <ul class="text-sm space-y-2 text-gray-600">
+                                <li>❌ Miedo a la expansión</li>
+                                <li>❌ Control local y físico</li>
+                                <li>❌ Enfoque solo en el Producto</li>
+                            </ul>
+                        </div>
+                        <!-- Tarjeta Derecha -->
+                        <div class="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500 shadow-md relative overflow-hidden">
+                            <div class="absolute top-0 right-0 -mt-2 -mr-2 w-12 h-12 bg-yellow-200 rounded-full"></div>
+                            <h3 class="text-xl font-bold text-yellow-800 mb-2">Visión Ray Kroc</h3>
+                            <div class="text-sm font-semibold uppercase text-yellow-600 mb-4">Modelo Escalable</div>
+                            <ul class="text-sm space-y-2 text-gray-700">
+                                <li>✅ Expansión agresiva</li>
+                                <li>✅ Control legal (Inmobiliario)</li>
+                                <li>✅ Enfoque en el Sistema</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. PRM y Riesgos -->
+                <section id="prm" class="mb-12 section-anchor">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4 border-l-4 border-red-500 pl-3">5. Gestión de Relaciones con Socios (PRM) y Reducción de Riesgos</h2>
+                    <p class="mt-4 text-lg leading-relaxed">
+                        Vemos a Kroc fracasar al principio cuando recluta a sus amigos ricos del club de campo. La película nos muestra locales desastrosos: venden pollo frito (rompiendo el sistema estandarizado y ralentizando la operación), los dueños no aparecen y el servicio es sucio. Luego, Kroc encuentra a un vendedor de biblias judío y a parejas modestas que ponen "su vida" en el asador.
+                    </p>
+                    <div class="mt-4 space-y-4">
+                        <p class="text-lg leading-relaxed">
+                            <strong class="text-red-700">Fallo en el Perfil del Socio:</strong> Los inversores ricos veían el negocio como un pasatiempo, lo que derivó en una pésima atención al cliente final. Esto demuestra que un mal Partner Relationship Management (PRM) daña directamente la reputación de la marca.
+                        </p>
+                        <p class="text-lg leading-relaxed">
+                            <strong class="text-red-700">Alineación Cultural y Compromiso:</strong> El éxito llegó al reclutar socios con "hambre" económica. Kroc descubrió que para garantizar una buena experiencia al consumidor, necesitaba franquiciados cuyos valores de esfuerzo y dedicación estuvieran alineados con la cultura operativa de McDonald's.
+                        </p>
+                    </div>
+
+                    <!-- GRÁFICO SECCION 5 -->
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                        <div class="h-64 relative">
+                            <canvas id="chartSuccessRate"></canvas>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-lg text-sm text-gray-600">
+                            <h4 class="font-bold text-gray-800 mb-2">Interpretación del Gráfico:</h4>
+                            <p>El gráfico muestra una correlación directa entre el <strong>perfil socioeconómico</strong> y el éxito operativo.</p>
+                            <ul class="mt-2 list-disc list-inside">
+                                <li>Los <strong>Inversores Ricos</strong> tuvieron altas tasas de fracaso por falta de supervisión.</li>
+                                <li>La <strong>Clase Trabajadora</strong> logró el éxito al depender su sustento del negocio, alineándose perfectamente con la exigencia operativa.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. Estandarización y Marca -->
+                <section id="brand" class="mb-12 section-anchor">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4 border-l-4 border-yellow-400 pl-3">6. Estandarización y Brand Equity</h2>
+                    <p class="mt-4 text-lg leading-relaxed text-gray-600 mb-6">
+                        Kroc se muestra obsesivo con los detalles, repitiendo que "una hamburguesa en Illinois debe saber igual que una en California". Incluso surge el conflicto por el uso de batidos en polvo para ahorrar costos.
+                    </p>
+                    
+                    <!-- Cardview Horizontal para Sección 6 -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <!-- Card 1: Consistencia -->
+                        <div class="bg-yellow-50 p-6 rounded-xl border border-yellow-200 shadow-md hover:shadow-lg transition-shadow duration-300">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-yellow-100 p-2 rounded-full mr-3 text-yellow-700">
+                                    <!-- Icono Hábito/Repetición -->
+                                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-900">Consistencia como Lealtad</h3>
+                            </div>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                En CRM, la incertidumbre es enemiga de la venta. La estandarización rigurosa asegura que el cliente sepa exactamente qué esperar, eliminando el riesgo en la decisión de compra y fomentando el hábito.
+                            </p>
+                        </div>
+
+                        <!-- Card 2: Brand Equity -->
+                        <div class="bg-red-50 p-6 rounded-xl border border-red-200 shadow-md hover:shadow-lg transition-shadow duration-300">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-red-100 p-2 rounded-full mr-3 text-red-700">
+                                    <!-- Icono Marca/Estrella -->
+                                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-900">Brand Equity (Valor de Marca)</h3>
+                            </div>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                Más allá del producto, Kroc construyó un activo intangible. Los "Arcos Dorados" se convirtieron en un símbolo de confianza y familia. El cliente compraba la seguridad y la experiencia asociada a la marca.
+                            </p>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- 7. Conclusiones -->
+                <section id="conclusiones" class="mb-12 section-anchor">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4 border-l-4 border-red-500 pl-3">7. Conclusiones Generales</h2>
+                    <p class="mt-4 text-lg leading-relaxed mb-6">
+                        Al analizar el desenlace de "El Fundador" y la consolidación del imperio bajo la óptica del CRM, concluimos que:
+                    </p>
+
+                    <!-- Grid Layout para Conclusiones (Estilo Solicitado) -->
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <!-- Conclusión 1 -->
+                        <div class="p-5 bg-white border border-red-200 rounded-lg shadow-md hover:bg-red-50 transition-colors duration-200">
+                            <h4 class="font-bold text-xl text-red-700">CLV define la Estrategia</h4>
+                            <p class="text-sm text-gray-600 mt-2">
+                                El éxito no fue la hamburguesa, sino adaptar todo el ecosistema para retener al cliente más valioso: la familia estadounidense.
+                            </p>
+                        </div>
+
+                        <!-- Conclusión 2 -->
+                        <div class="p-5 bg-white border border-red-200 rounded-lg shadow-md hover:bg-red-50 transition-colors duration-200">
+                            <h4 class="font-bold text-xl text-red-700">Gestión del Churn</h4>
+                            <p class="text-sm text-gray-600 mt-2">
+                                La innovación del sistema Speedee fue una estrategia defensiva para eliminar los tiempos de espera que causaban la pérdida de clientes.
+                            </p>
+                        </div>
+
+                        <!-- Conclusión 3 -->
+                        <div class="p-5 bg-white border border-yellow-400 rounded-lg shadow-md hover:bg-yellow-50 transition-colors duration-200">
+                            <h4 class="font-bold text-xl text-yellow-800">Control para Escalar</h4>
+                            <p class="text-sm text-gray-600 mt-2">
+                                La disputa con los hermanos McDonald demuestra que no se puede escalar una relación con el cliente sin mecanismos de control rígidos (el modelo inmobiliario).
+                            </p>
+                        </div>
+
+                        <!-- Conclusión 4 -->
+                        <div class="p-5 bg-white border border-yellow-400 rounded-lg shadow-md hover:bg-yellow-50 transition-colors duration-200">
+                            <h4 class="font-bold text-xl text-yellow-800">El Poder de la Marca</h4>
+                            <p class="text-sm text-gray-600 mt-2">
+                                "McDonald's" sonaba a familia. El activo más valioso del CRM es la conexión emocional que la marca tiene con el mercado.
+                            </p>
+                        </div>
+
+                    </div>
+                </section>
+            </main>
+
+            <!-- Columna Derecha: Sidebar Sticky (Solo Desktop) -->
+            <aside class="lg:col-span-4 lg:block hidden">
+                <div class="sticky top-24 space-y-8"> <!-- top-24 da espacio debajo del navbar -->
+                    
+                    <!-- Tabla de Contenidos Sticky -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4 border-b pb-2 text-red-600">Índice del Análisis</h3>
+                        <nav class="space-y-2 text-sm">
+                            <a href="#intro" class="block text-gray-600 hover:text-red-600 transition duration-150 py-1">1. Diagnóstico y Pain Points</a>
+                            <a href="#operativo" class="block text-gray-600 hover:text-red-600 transition duration-150 py-1">2. CRM Operativo (Speedee)</a>
+                            <a href="#clv" class="block text-gray-600 hover:text-red-600 transition duration-150 py-1">3. Segmentación y CLV</a>
+                            <a href="#visiones" class="block text-gray-600 hover:text-red-600 transition duration-150 py-1">4. Choque de Visiones</a>
+                            <a href="#prm" class="block text-gray-600 hover:text-red-600 transition duration-150 py-1">5. Gestión de Socios (PRM)</a>
+                            <a href="#brand" class="block text-gray-600 hover:text-red-600 transition duration-150 py-1">6. Estandarización y Marca</a>
+                            <a href="#conclusiones" class="block text-gray-600 hover:text-red-600 transition duration-150 py-1">7. Conclusiones Generales</a>
+                        </nav>
+                    </div>
+
+                    <!-- Tarjeta de Autores -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4 border-b pb-2 text-red-600">Autores (Grupo 05)</h3>
+                        <ul class="space-y-2 text-sm text-gray-700">
+                            <li class="flex items-center space-x-2"><span class="text-yellow-500">●</span> <span>Chavez Cruz Celio</span></li>
+                            <li class="flex items-center space-x-2"><span class="text-yellow-500">●</span> <span>Chirito Gomez Lorenzo</span></li>
+                            <li class="flex items-center space-x-2"><span class="text-yellow-500">●</span> <span>Espejo Blas Luis</span></li>
+                            <li class="flex items-center space-x-2"><span class="text-yellow-500">●</span> <span>Giraldo Alcantara Denilson</span></li>
+                            <li class="flex items-center space-x-2"><span class="text-yellow-500">●</span> <span>Papa Reyes Carlos</span></li>
+                            <li class="flex items-center space-x-2"><span class="text-yellow-500">●</span> <span>Parraga Cabrel Alexis</span></li>
+                            <li class="flex items-center space-x-2"><span class="text-yellow-500">●</span> <span>Tahua Castillo Cristhian</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Caja de Recursos -->
+                    <div class="p-6 bg-red-50 rounded-xl border border-red-200 text-center shadow-lg">
+                        <h3 class="text-xl font-bold text-red-800 mb-3">Recursos del Caso</h3>
+                        <p class="text-sm text-red-700 mb-4">Descargue el diagrama de flujo del sistema Speedee y el análisis CLV en PDF.</p>
+                        <button onclick="alert('Descargando análisis de El Fundador...')"
+                                class="w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-red-600 hover:bg-red-700 transition duration-150 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            <!-- SVG Inline para el ícono de Descarga -->
+                            <svg class="w-5 h-5 mr-2 -ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                            Descargar Análisis
+                        </button>
+                    </div>
+
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- 4. FOOTER -->
+    <footer class="bg-gray-800 text-white mt-12">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <div class="text-center space-y-4">
+                <p class="text-2xl font-bold text-yellow-400">Grupo 05 | ANÁLISIS DE CASO CRM</p>
+                
+                <!-- Créditos Móvil (Visible en dispositivos pequeños) -->
+                <div class="lg:hidden text-sm text-gray-400 pt-4 border-t border-gray-700">
+                    <p class="font-semibold mb-2">Integrantes:</p>
+                    <p>Chavez Cruz Celio, Chirito Gomez Lorenzo, Espejo Blas Luis, Giraldo Alcantara Denilson, Papa Reyes Carlos, Parraga Cabrel Alexis, Tahua Castillo Cristhian</p>
+                </div>
+
+                <div class="pt-4 border-t border-gray-700 text-sm text-gray-400">
+                    &copy; 2024. Todos los derechos reservados. | Proyecto Educativo Universitario.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 5. JAVASCRIPT: Funcionalidad y Gráficos -->
+    <script>
+        // --- 1. Lógica del Menú Hamburguesa y Scroll ---
+        const menuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIconOpen = document.getElementById('menu-icon-open');
+        const menuIconClose = document.getElementById('menu-icon-close');
+        const progressIndicator = document.getElementById('reading-progress');
+
+        menuButton.addEventListener('click', () => {
+            const isMenuOpen = mobileMenu.classList.toggle('hidden');
+            menuIconOpen.classList.toggle('hidden', !isMenuOpen);
+            menuIconClose.classList.toggle('hidden', isMenuOpen);
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    menuIconOpen.classList.remove('hidden');
+                    menuIconClose.classList.add('hidden');
+                });
+            });
+        });
+
+        function updateReadingProgress() {
+            const totalHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPosition = window.scrollY;
+            if (totalHeight > 0) {
+                const progress = (scrollPosition / totalHeight) * 100;
+                progressIndicator.style.width = `${progress}%`;
+            }
+        }
+        window.addEventListener('scroll', updateReadingProgress);
+        window.addEventListener('load', updateReadingProgress);
+
+        // --- 2. CONFIGURACIÓN DE GRÁFICOS (CHART.JS) ---
+
+        // Gráfico Sección 2: Tiempos de Servicio
+        const ctxService = document.getElementById('chartServiceTime').getContext('2d');
+        new Chart(ctxService, {
+            type: 'bar',
+            data: {
+                labels: ['Drive-In Típico (30 min)', 'Sistema Speedee (30 seg)'],
+                datasets: [{
+                    label: 'Tiempo de Espera (Minutos)',
+                    data: [30, 0.5], // 30 min vs 0.5 min (30 seg)
+                    backgroundColor: [
+                        'rgba(156, 163, 175, 0.6)', // Gris
+                        'rgba(185, 28, 28, 0.8)'    // Rojo McDonald's
+                    ],
+                    borderColor: [
+                        'rgba(156, 163, 175, 1)',
+                        'rgba(185, 28, 28, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Minutos' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // Gráfico Sección 5: Tasa de Éxito de Socios
+        const ctxSuccess = document.getElementById('chartSuccessRate').getContext('2d');
+        new Chart(ctxSuccess, {
+            type: 'doughnut',
+            data: {
+                labels: ['Inversores Ricos (Fracaso)', 'Clase Trabajadora (Éxito)'],
+                datasets: [{
+                    label: 'Tasa de Éxito Estimada',
+                    data: [20, 95], // Datos representativos del caso
+                    backgroundColor: [
+                        'rgba(107, 114, 128, 0.5)', // Gris oscuro
+                        'rgba(234, 179, 8, 0.9)'    // Amarillo Dorado
+                    ],
+                    borderColor: [
+                        'rgba(107, 114, 128, 1)',
+                        'rgba(234, 179, 8, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Tasa de Éxito según Perfil de Socio'
+                    }
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>
